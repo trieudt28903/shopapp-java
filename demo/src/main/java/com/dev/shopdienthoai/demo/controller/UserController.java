@@ -5,9 +5,9 @@ import com.dev.shopdienthoai.demo.domain.User;
 import com.dev.shopdienthoai.demo.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 public class UserController {
@@ -16,16 +16,21 @@ public class UserController {
     public UserController(UserService userService) {
         this.userService = userService;
     }
+    @GetMapping("/user")
+    public List<User> getAllUser() {
+        return userService.getAllUsers();
+    }
+    @GetMapping("/user/{id}")
+    public User getUserById(@PathVariable Long id) {
+        return this.userService.getUserById(id);
+    }
+    @PostMapping("/user")
+    public User createNewUser(@RequestBody User user){
+        return userService.saveUser(user);
+    }
 
-    @GetMapping("/user/create")
-    public String createNewUser(){
-        User user = new User();
-        user.setEmail("trieu@gmail.com");
-        user.setPassword("123456");
-        user.setName("trieudeptrai");
-        this.userService.saveUser(user);
-
-
-        return "tạo user thành công";
+    @DeleteMapping("/user/{id}")
+    public void deleteUser(@PathVariable Long id){
+        this.userService.deleteUser(id);
     }
 }
