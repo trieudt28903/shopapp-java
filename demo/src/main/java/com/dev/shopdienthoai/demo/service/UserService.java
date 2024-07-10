@@ -29,4 +29,15 @@ public class UserService {
         }
         return null;
     }
+    public User updateUser(User user){
+       User user1=this.userRepository.getById(user.getId());
+       if(user1!=null){
+           user1.setPassword(user.getPassword());
+           user1.setName(user.getName());
+           user1.setEmail(user.getEmail());
+
+           return this.userRepository.save(user1);
+       }
+       return null;
+    }
 }
