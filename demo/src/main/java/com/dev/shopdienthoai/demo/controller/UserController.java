@@ -2,6 +2,7 @@ package com.dev.shopdienthoai.demo.controller;
 
 
 import com.dev.shopdienthoai.demo.domain.User;
+import com.dev.shopdienthoai.demo.error.IdInvalidException;
 import com.dev.shopdienthoai.demo.service.UserService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -9,6 +10,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
+
 public class UserController {
     private final UserService userService;
 
@@ -20,11 +22,9 @@ public class UserController {
         List<User> userList = userService.getAllUsers();
         return ResponseEntity.status(HttpStatus.OK).body(userList);
     }
-
     @GetMapping("/users/{id}")
     public ResponseEntity<User> getUserById(@PathVariable Long id) {
         User user=this.userService.getUserById(id);
-        //return ResponseEntity.status(HttpStatus.OK).body(user);
         return ResponseEntity.ok(user);
     }
 
@@ -35,9 +35,11 @@ public class UserController {
     }
 
     @DeleteMapping("/users/{id}")
-    public ResponseEntity<Void> deleteUser(@PathVariable Long id){
+    public ResponseEntity<Void> deleteUser(@PathVariable Long id) throws IdInvalidException {
+        if (id>=1500){
+            throw new IdInvalidException("ID KHONG HOP LE");
+        }
         this.userService.deleteUser(id);
-       // return ResponseEntity.status(HttpStatus.OK).body("delete success");
         return ResponseEntity.noContent().build();
     }
     @PutMapping("/users")
